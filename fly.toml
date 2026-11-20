@@ -10,8 +10,8 @@
 # (máy free bị tính giờ, volume có phí riêng rất nhỏ). Nếu muốn 0đ tuyệt đối
 # thì dùng Render free (không có persistent disk) — xem README.
 
-app = "knit"
-primary_region = "sgn"
+app = "knit-ulis"
+primary_region = "sin"
 
 [build]
   dockerfile = "Dockerfile"
