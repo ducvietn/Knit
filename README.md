@@ -48,25 +48,39 @@ http://localhost:4000 — giống hệt cách chạy trên môi trường deploy
 Bang deploy da duoc chuan bi. Khong con "localhost" hardcode trong code:
 web va API cung origin, nen mot domain la chay.
 
-### Fly.io (khuyen nghi cho pilot)
+### Fly.io (khuyen nghi cho pilot) — DA DEPLOY
 
-Co persistent volume nen SQLite song qua cac lan restart. Free tier
-may 1 vCPU / 512 MB; volume 1 GB co phi rieng nho.
+App hien tai: **https://knit-ulis.fly.dev** (region `sin` — Singapore,
+volume 1 GB ten `knit_data` de SQLite song qua cac lan restart).
+
+Lenh tu do tai len, dung lai:
 
     npm i -g flyctl
     fly auth login
-    fly launch --copy-config --no-deploy
-    fly volumes create knit_data --size 1
-    fly secrets set KNIT_SECRET=CHANGE_ME_1234567890
-    fly deploy
-    fly open
+    fly apps create knit-ulis --org personal
+    fly volumes create knit_data --size 1 --app knit-ulis --region sin
+    fly secrets set KNIT_SECRET=<chuoi-ngau-nhien> --app knit-ulis
+    fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
 
-Sau khi deploy, web tai https://knit.fly.dev. API cung tai domain do,
+Luu y: ten app tren Fly.io la TOAN CUC, nen "knit" co the da bi nguoi
+khac giu. Region code dung la `sin` (Singapore), khong phai `sgn`.
+
+Sau khi deploy, web tai https://knit-ulis.fly.dev. API cung tai domain do,
 duong dan la /api.
 
 Sinh chuoi KNIT_SECRET:
 
     node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+
+### Cap nhat lan sau
+
+    git pull
+    fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
+
+Doi mat khau/secret:
+
+    fly secrets set KNIT_SECRET=<chuoi-moi> --app knit-ulis
+    fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
 
 ### Render
 
