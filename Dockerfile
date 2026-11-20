@@ -59,8 +59,12 @@ COPY --from=build /app/server/package.json ./server/package.json
 COPY --from=build /app/app/dist ./app/dist
 
 # Thư mục dữ liệu nằm trên volume để dữ liệu sống sót qua các lần khởi động lại.
+#
+# KHÔNG khai báo `VOLUME ["/data"]` ở đây: Railway không chấp nhận directive
+# đó (phải dùng Railway Volumes).  Volume trên Fly.io khai báo trong
+# `fly.toml`, còn local thì dùng `docker-compose.yml` — cả hai đều không
+# cần directive trong Dockerfile.
 RUN mkdir -p /data && chown -R knit:knit /data /app
-VOLUME ["/data"]
 
 ENV NODE_ENV=production \
     PORT=4000 \

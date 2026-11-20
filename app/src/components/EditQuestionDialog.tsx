@@ -8,9 +8,9 @@ import type { Question, Topic } from '../data/types'
 /**
  * Hộp thoại sửa câu hỏi của chính mình (hoặc cán bộ kiểm duyệt).
  *
- * Giữ nguyên ý "hỏi một lần, được đáp một lần": sửa câu hỏi không xoá
- * các câu trả lời đã có, và có ghi chú nhắc người dùng cập nhật nếu nội dung
- * thay đổi đáng kể.
+ * Giữ nguyên nguyên tắc "một câu hỏi, một câu trả lời tốt nhất": sửa câu hỏi
+ * không xoá các câu trả lời đã có, và có ghi chú nhắc người dùng cập nhật nếu
+ * nội dung thay đổi đáng kể.
  */
 export function EditQuestionDialog({
   question,

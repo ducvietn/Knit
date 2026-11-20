@@ -76,7 +76,7 @@ export function AppLayout() {
                 KNIT
               </span>
               <span className="mt-0.5 hidden text-2xs text-ink-faint sm:block">
-                {t('Hỏi một lần, được đáp một lần', 'Ask once, answered once')}
+                {t('Dành cho sinh viên ULIS', 'For ULIS students')}
               </span>
             </span>
           </Link>
@@ -214,8 +214,8 @@ export function AppLayout() {
             </div>
             <p className="mt-3 text-xs leading-relaxed text-ink-muted">
               {t(
-                'Nền tảng hỏi đáp dành cho sinh viên ULIS. Hỏi một lần, được đáp một lần — kèm nguồn chính thức.',
-                'A Q&A platform for ULIS students. Ask once, answered once — with official sources.',
+                'Nền tảng hỏi đáp dành cho sinh viên ULIS — kèm nguồn chính thức.',
+                'A Q&A platform for ULIS students — with official sources.',
               )}
             </p>
             <p className="mt-3 font-mono text-2xs text-ink-faint">{CAMPUS.email}</p>
