@@ -72,7 +72,7 @@ Sinh chuoi KNIT_SECRET:
 
     node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 
-### Cap nhat lan sau
+### Cap nhat lan sau (Fly.io)
 
     git pull
     fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
@@ -81,6 +81,44 @@ Doi mat khau/secret:
 
     fly secrets set KNIT_SECRET=<chuoi-moi> --app knit-ulis
     fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
+
+### Railway (da deploy — chay song song Fly.io)
+
+App: **https://web-production-af92c.up.railway.app**
+(project `humorous-luck`, service `web`, region `sfo`, volume 500 MB
+`web-volume` gan tai `/data` cho SQLite + anh avatar).
+
+Lenh tu do tai len, dung lai:
+
+    npm i -g @railway/cli
+    railway login
+    railway link --project <project-id>
+    railway service link web
+    railway volume add --mount-path /data
+    railway variables --service web --set KNIT_SECRET=<chuoi-ngau-nhien>
+    railway up --service web
+
+Cau hinh nam trong `railway.json` (Config as Code). Ba luu y:
+
+- **Free plan bat buoc bat serverless** (`sleepApplication: true`). Neu
+  server chay lien tuc, Railway bao loi "Free plan deployments must be
+  serverless".
+- **Volume cua Railway mount bang quyen `root`**, nen container chay bang
+  `root` va entrypoint `docker-entrypoint.sh` chuan hoa quyen so huu truoc,
+  roi chay app voi quyen `knit`. Neu bo qua, SQLite bao `SQLITE_CANTOPEN`.
+- `railway.json` phai dung schema phang (`build` / `deploy` / `environments`),
+  khong nest trong `services`.
+
+Kiem tra:
+
+    railway service status --service web
+    railway logs --service web --lines 50
+
+### Cap nhat lan sau (ca hai nen tang)
+
+    git pull
+    fly deploy --app knit-ulis --config fly.toml --dockerfile Dockerfile
+    railway up --service web
 
 ### Render
 
