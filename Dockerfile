@@ -65,6 +65,7 @@ VOLUME ["/data"]
 ENV NODE_ENV=production \
     PORT=4000 \
     KNIT_DB=/data/knit.db \
+    KNIT_AVATAR_DIR=/data/avatars \
     KNIT_WEB_DIST=/app/app/dist \
     KNIT_SEED=/app/server/seed-data.json
 

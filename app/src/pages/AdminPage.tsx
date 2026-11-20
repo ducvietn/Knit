@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import { useI18n, formatCount, formatDateTime } from '../lib/i18n'
 import { state, useKnit } from '../store/knit'
+import { Avatar } from '../components/Avatar'
 import type { PublicUser, Report } from '../data/types'
 
 interface Stats {
@@ -267,9 +268,7 @@ export function AdminPage() {
             <ul className="divide-y divide-paper-100">
               {users.map((u) => (
                 <li key={u.id} className="flex flex-wrap items-center gap-3 py-3.5 first:pt-0 last:pb-0">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 font-mono text-2xs font-bold text-brand-700">
-                    {u.avatarSeed}
-                  </span>
+                  <Avatar author={u} size="sm" />
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-1.5 text-sm font-medium text-ink">
                       {u.displayName}

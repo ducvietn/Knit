@@ -4,7 +4,8 @@ import { AUTHORS, CAMPUS, FACULTIES, OFFICES } from '../data/mock'
 import { TOPICS } from '../data/topics'
 import { changePassword, state, updateProfile, useKnit } from '../store/knit'
 import { useI18n, formatCount, formatDate } from '../lib/i18n'
-import { Avatar } from '../components/Avatar'
+import { Avatar, toneClass } from '../components/Avatar'
+import { AvatarPicker } from '../components/AvatarPicker'
 import { Modal } from '../components/Modal'
 
 export function ProfilePage() {
@@ -14,6 +15,7 @@ export function ProfilePage() {
 
   const [editOpen, setEditOpen] = useState(false)
   const [passwordOpen, setPasswordOpen] = useState(false)
+  const [avatarOpen, setAvatarOpen] = useState(false)
   const [displayName, setDisplayName] = useState(me.displayName)
   const [facultyVi, setFacultyVi] = useState(me.facultyVi)
   const [cohort, setCohort] = useState(me.cohort)
@@ -89,9 +91,31 @@ export function ProfilePage() {
             aria-hidden
           />
           <div className="relative flex flex-wrap items-center gap-5">
-            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 font-display text-xl font-bold text-white ring-1 ring-white/25 backdrop-blur">
-              {me.avatarSeed}
+            <span className="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white/15 font-display text-xl font-bold text-white ring-1 ring-white/25 backdrop-blur">
+              {me.avatarUrl ? (
+                <img src={me.avatarUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span
+                  className={`inline-flex h-full w-full items-center justify-center ${toneClass(
+                    me.avatarTone ?? 'brand',
+                  )}`}
+                >
+                  {me.avatarSeed}
+                </span>
+              )}
             </span>
+            {isSignedIn && (
+              <button
+                type="button"
+                onClick={() => {
+                  setAvatarOpen(true)
+                  setError(null)
+                }}
+                className="-ml-9 self-start rounded-full bg-white/90 px-2.5 py-1 text-2xs font-semibold text-brand-800 shadow-sm transition hover:bg-white"
+              >
+                {t('Đổi ảnh', 'Change photo')}
+              </button>
+            )}
             <div className="min-w-0 flex-1">
               <h1 className="flex items-center gap-2 font-display text-xl font-bold text-white">
                 {me.displayName}
@@ -405,6 +429,20 @@ export function ProfilePage() {
           </section>
         </aside>
       </div>
+
+      {/* Đổi avatar */}
+      <Modal
+        open={avatarOpen}
+        onClose={() => setAvatarOpen(false)}
+        title={t('Đổi ảnh đại diện', 'Change avatar')}
+        description={t(
+          'Tải ảnh của bạn lên, hoặc chọn màu cho chữ cái đại diện nếu bạn không muốn đăng ảnh.',
+          'Upload a photo, or pick a colour for your initials if you would rather not post a picture.',
+        )}
+        size="sm"
+      >
+        <AvatarPicker user={me} onClose={() => setAvatarOpen(false)} />
+      </Modal>
 
       {/* Sửa hồ sơ */}
       <Modal

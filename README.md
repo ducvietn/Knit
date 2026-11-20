@@ -106,6 +106,7 @@ Hoac dung file san co:
 | KNIT_SECRET | Co | Chuoi bi mat ky JWT. Khong co o production thi server tu dung |
 | PORT | Khong | Mac dinh 4000 |
 | KNIT_DB | Khong | Duong dan file SQLite, mac dinh ./data/knit.db |
+| KNIT_AVATAR_DIR | Khong | Thu muc luu anh avatar, mac dinh ./data/avatars |
 | KNIT_WEB_DIST | Khong | Thu muc web tinh, mac dinh ../app/dist |
 | KNIT_SEED | Khong | File du lieu mau, mac dinh ./seed-data.json |
 | KNIT_CORS_ORIGINS | Khong | Danh sach origin duoc phep goi API. Rong = chi same-origin |

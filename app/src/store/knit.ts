@@ -77,6 +77,20 @@ export const commit = () => {
   for (const fn of listeners) fn()
 }
 
+/**
+ * Đồng bộ avatar của người dùng hiện tại vào các câu hỏi / câu trả lời đã
+ * nạp — để avatar mới hiện ngay mà không cần tải lại cả trang.
+ */
+function syncAvatarAcross(state_: KnitState, user: PublicUser) {
+  const apply = (author: PublicUser) => {
+    if (author.id !== user.id) return
+    author.avatarUrl = user.avatarUrl
+    author.avatarTone = user.avatarTone
+  }
+  for (const q of state_.questions) apply(q.author)
+  for (const a of state_.answers) apply(a.author)
+}
+
 /** Hook để component re-render khi kho trạng thái thay đổi. */
 export const useKnit = () => useSyncExternalStore(subscribe, getSnapshot)
 
@@ -417,4 +431,31 @@ export const updateProfile = async (input: {
 
 export const changePassword = async (currentPassword: string, newPassword: string) => {
   await api.post('/auth/password', { currentPassword, newPassword })
+}
+
+/** Tải ảnh avatar lên và cập nhật hồ sơ hiện tại. */
+export const uploadAvatar = async (dataUrl: string) => {
+  const res = await api.post<{ user: PublicUser }>('/avatar', { dataUrl })
+  state.currentUser = res.user
+  syncAvatarAcross(state, res.user)
+  commit()
+  return res.user
+}
+
+/** Chọn màu cho avatar dựng sẵn (chữ cái đại diện). */
+export const updateAvatarTone = async (tone: string) => {
+  const res = await api.patch<{ user: PublicUser }>('/avatar/tone', { tone })
+  state.currentUser = res.user
+  syncAvatarAcross(state, res.user)
+  commit()
+  return res.user
+}
+
+/** Bỏ ảnh đã tải, quay lại dùng chữ cái đại diện. */
+export const removeAvatar = async () => {
+  const res = await api.delete<{ user: PublicUser }>('/avatar')
+  state.currentUser = res.user
+  syncAvatarAcross(state, res.user)
+  commit()
+  return res.user
 }

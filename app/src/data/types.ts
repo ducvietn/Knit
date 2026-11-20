@@ -1,5 +1,14 @@
 export type Role = 'student' | 'contributor' | 'staff' | 'admin'
 
+/**
+ * Bảng màu avatar dựng sẵn.
+ *
+ * Khớp với `AVATAR_TONES` trong `shared/types.ts`.
+ */
+export const AVATAR_TONES = ['brand', 'clay', 'verify', 'emerald', 'amber', 'rose'] as const
+
+export type AvatarTone = (typeof AVATAR_TONES)[number]
+
 export type Topic = 'hoc-tap' | 'thu-tuc' | 'doi-song' | 'clb'
 
 export interface TopicMeta {
@@ -24,6 +33,10 @@ export interface Author {
   /** Tài khoản đại diện: giảng viên / cán bộ lớp → tick xanh */
   verified: boolean
   avatarSeed: string
+  /** Ảnh do người dùng tải lên — rỗng thì dùng avatar dựng sẵn */
+  avatarUrl?: string
+  /** Màu nền của avatar dựng sẵn */
+  avatarTone?: AvatarTone
 }
 
 export interface Source {

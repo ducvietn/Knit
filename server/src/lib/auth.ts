@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import type { NextFunction, Request, Response } from 'express'
 import { db } from './db'
-import type { PublicUser, Role } from '../../../shared/types'
+import type { AvatarTone, PublicUser, Role } from '../../../shared/types'
 
 /**
  * Bí mật ký JWT.
@@ -54,6 +54,8 @@ export const toPublicUser = (row: Record<string, unknown>): PublicUser => ({
   role: String(row.role) as Role,
   verified: Boolean(row.verified),
   avatarSeed: String(row.avatar_seed),
+  avatarUrl: row.avatar_url ? String(row.avatar_url) : undefined,
+  avatarTone: (row.avatar_tone ? String(row.avatar_tone) : 'brand') as AvatarTone,
 })
 
 export const findUserById = (id: string) =>

@@ -261,6 +261,7 @@ export const AUTHORS: Author[] = [
     role: 'contributor',
     verified: true,
     avatarSeed: 'MA',
+    avatarTone: 'brand',
   },
   {
     id: 'a2',
@@ -271,6 +272,7 @@ export const AUTHORS: Author[] = [
     role: 'student',
     verified: false,
     avatarSeed: 'TD',
+    avatarTone: 'clay',
   },
   {
     id: 'a3',
@@ -281,6 +283,7 @@ export const AUTHORS: Author[] = [
     role: 'contributor',
     verified: false,
     avatarSeed: 'QB',
+    avatarTone: 'verify',
   },
   {
     id: 'a4',
@@ -291,6 +294,7 @@ export const AUTHORS: Author[] = [
     role: 'staff',
     verified: true,
     avatarSeed: 'NL',
+    avatarTone: 'emerald',
   },
   {
     id: 'a5',
@@ -301,6 +305,7 @@ export const AUTHORS: Author[] = [
     role: 'student',
     verified: false,
     avatarSeed: 'HD',
+    avatarTone: 'amber',
   },
   {
     id: 'a6',
@@ -311,6 +316,7 @@ export const AUTHORS: Author[] = [
     role: 'admin',
     verified: true,
     avatarSeed: 'PL',
+    avatarTone: 'rose',
   },
   {
     id: 'a7',
@@ -321,6 +327,7 @@ export const AUTHORS: Author[] = [
     role: 'student',
     verified: false,
     avatarSeed: 'MU',
+    avatarTone: 'brand',
   },
   {
     id: 'a8',
@@ -331,6 +338,7 @@ export const AUTHORS: Author[] = [
     role: 'contributor',
     verified: false,
     avatarSeed: 'TD',
+    avatarTone: 'clay',
   },
 ]
 

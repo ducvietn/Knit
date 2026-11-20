@@ -20,6 +20,7 @@ primary_region = "sin"
   PORT = "4000"
   NODE_ENV = "production"
   KNIT_DB = "/data/knit.db"
+  KNIT_AVATAR_DIR = "/data/avatars"
   KNIT_WEB_DIST = "/app/app/dist"
   KNIT_SEED = "/app/server/seed-data.json"
 

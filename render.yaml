@@ -26,6 +26,8 @@ services:
         value: 4000
       - key: KNIT_DB
         value: /data/knit.db
+      - key: KNIT_AVATAR_DIR
+        value: /data/avatars
       - key: KNIT_WEB_DIST
         value: /app/app/dist
       - key: KNIT_SEED

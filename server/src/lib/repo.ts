@@ -25,6 +25,7 @@ const questionSelect = `
   SELECT q.*, u.id AS a_id, u.display_name AS a_display_name, u.faculty_vi AS a_faculty_vi,
          u.faculty_en AS a_faculty_en, u.cohort AS a_cohort, u.role AS a_role,
          u.verified AS a_verified, u.avatar_seed AS a_avatar_seed,
+         u.avatar_url AS a_avatar_url, u.avatar_tone AS a_avatar_tone,
          (SELECT COUNT(*) FROM answers a WHERE a.question_id = q.id) AS answer_count,
          (SELECT COUNT(*) FROM answers a WHERE a.question_id = q.id
             AND a.variant_context IS NOT NULL) AS variant_count
@@ -40,6 +41,8 @@ const authorFromRow = (row: Row): PublicUser => ({
   role: String(row.a_role) as PublicUser['role'],
   verified: Boolean(row.a_verified),
   avatarSeed: String(row.a_avatar_seed),
+  avatarUrl: row.a_avatar_url ? String(row.a_avatar_url) : undefined,
+  avatarTone: (row.a_avatar_tone ? String(row.a_avatar_tone) : 'brand') as PublicUser['avatarTone'],
 })
 
 const toQuestion = (row: Row): Question => ({
@@ -156,8 +159,9 @@ export const listMyQuestions = (userId: string) =>
 const answerSelect = `
   SELECT a.*, u.id AS a_id, u.display_name AS a_display_name, u.faculty_vi AS a_faculty_vi,
          u.faculty_en AS a_faculty_en, u.cohort AS a_cohort, u.role AS a_role,
-         u.verified AS a_verified, u.avatar_seed AS a_avatar_seed
-  FROM answers a JOIN users u ON u.id = a.author_id
+         u.verified AS a_verified, u.avatar_seed AS a_avatar_seed,
+         u.avatar_url AS a_avatar_url, u.avatar_tone AS a_avatar_tone
+   FROM answers a JOIN users u ON u.id = a.author_id
 `
 
 const toAnswer = (row: Row): Answer => {

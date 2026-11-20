@@ -19,6 +19,8 @@ export interface SeedAuthor {
   role: string
   verified: boolean
   avatarSeed: string
+  /** Màu avatar dựng sẵn — xem `AVATAR_TONES` trong `shared/types.ts` */
+  avatarTone?: string
 }
 
 export interface SeedSource {
@@ -128,8 +130,8 @@ export function seedIfEmpty(
 
   const insertAll = db.transaction(() => {
     const insertUser = db.prepare(
-      `INSERT INTO users (id, email, password_hash, display_name, faculty_vi, faculty_en, cohort, role, verified, avatar_seed, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (id, email, password_hash, display_name, faculty_vi, faculty_en, cohort, role, verified, avatar_seed, avatar_tone, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     for (const a of seed.authors) {
       insertUser.run(
@@ -143,6 +145,7 @@ export function seedIfEmpty(
         a.role,
         a.verified ? 1 : 0,
         a.avatarSeed,
+        a.avatarTone ?? 'brand',
         nowIso(),
       )
     }

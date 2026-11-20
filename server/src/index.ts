@@ -3,9 +3,11 @@ import { resolve } from 'node:path'
 import cors from 'cors'
 import express from 'express'
 import { attachUser } from './lib/auth'
+import { avatarDir } from './lib/avatar'
 import { adminRouter } from './routes/admin'
 import { answersRouter, meRouter } from './routes/answers'
 import { authRouter } from './routes/auth'
+import { avatarRouter } from './routes/avatar'
 import { notificationsRouter, reportsRouter } from './routes/notifications'
 import { questionsRouter } from './routes/questions'
 import { isDatabaseEmpty, readSeedFile, seedIfEmpty } from './seed-data'
@@ -55,6 +57,7 @@ app.get('/api/health', (_req, res) => {
 })
 
 app.use('/api/auth', authRouter)
+app.use('/api/avatar', avatarRouter)
 app.use('/api/questions', questionsRouter)
 app.use('/api', answersRouter)
 app.use('/api/notifications', notificationsRouter)
@@ -68,9 +71,19 @@ app.use('/api', (_req, res) => {
 
 /* ------------------------------------------------------------ web tĩnh (SPA) */
 
+/**
+ * Ảnh avatar do người dùng tải lên.
+ *
+ * Phục vụ trước khi bắt tay tới SPA để `/avatars/...` không bị nuốt vào
+ * `index.html`. Ảnh không tồn tại trả 404 rõ ràng, không phải trang web.
+ */
+app.use('/avatars', express.static(avatarDir, { maxAge: '7d' }))
+app.use('/avatars', (_req, res) => {
+  res.status(404).json({ error: 'not_found', message: 'Không tìm thấy ảnh này.' })
+})
+
 if (existsSync(WEB_DIST)) {
   app.use(express.static(WEB_DIST, { index: false, maxAge: '1h' }))
-
   // Mọi đường dẫn còn lại (SPA route) trả về index.html.
   app.get('*', (_req, res) => {
     res.sendFile(resolve(WEB_DIST, 'index.html'))

@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS users (
   role          TEXT NOT NULL CHECK (role IN ('student','contributor','staff','admin')),
   verified      INTEGER NOT NULL DEFAULT 0,
   avatar_seed   TEXT NOT NULL,
+  avatar_url    TEXT,
+  avatar_tone   TEXT NOT NULL DEFAULT 'brand',
   created_at    TEXT NOT NULL
 );
 
@@ -127,3 +129,16 @@ CREATE INDEX IF NOT EXISTS idx_reports_status ON reports(status);
 `)
 
 export const nowIso = () => new Date().toISOString()
+
+/**
+ * Thêm cột mới nếu bảng chưa có — để database cũ vẫn dùng được sau khi
+ * thêm tính năng mà không cần xoá dữ liệu.
+ */
+function addColumnIfMissing(table: string, column: string, definition: string) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[]
+  if (cols.some((c) => c.name === column)) return
+  db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`)
+}
+
+addColumnIfMissing('users', 'avatar_url', 'TEXT')
+addColumnIfMissing('users', 'avatar_tone', "TEXT DEFAULT 'brand'")

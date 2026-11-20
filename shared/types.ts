@@ -9,6 +9,16 @@
 
 export type Role = 'student' | 'contributor' | 'staff' | 'admin'
 
+/**
+ * Bảng màu avatar dựng sẵn.
+ *
+ * Dùng khi người dùng không muốn đăng ảnh thật — chữ cái đại diện trên nền
+ * màu. Danh sách phải khớp với bảng màu ở `app/src/components/Avatar.tsx`.
+ */
+export const AVATAR_TONES = ['brand', 'clay', 'verify', 'emerald', 'amber', 'rose'] as const
+
+export type AvatarTone = (typeof AVATAR_TONES)[number]
+
 export type Topic = 'hoc-tap' | 'thu-tuc' | 'doi-song' | 'clb'
 
 export interface TopicMeta {
@@ -30,6 +40,14 @@ export interface PublicUser {
   /** Tài khoản đại diện (giảng viên, cán bộ lớp) → tick xanh */
   verified: boolean
   avatarSeed: string
+  /**
+   * Ảnh avatar do người dùng tải lên.
+   *
+   * Rỗng = dùng avatar dựng sẵn từ `avatarSeed` + `avatarTone`.
+   */
+  avatarUrl?: string
+  /** Màu nền của avatar dựng sẵn */
+  avatarTone?: AvatarTone
 }
 
 export interface Source {
