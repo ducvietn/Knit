@@ -42,7 +42,7 @@ FROM node:20-bookworm-slim AS runtime
 WORKDIR /app
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates \
+  && apt-get install -y --no-install-recommends ca-certificates util-linux \
   && rm -rf /var/lib/apt/lists/* \
   && groupadd --system --gid 1001 knit \
   && useradd --system --uid 1001 --gid knit --home /app knit
@@ -66,6 +66,10 @@ COPY --from=build /app/app/dist ./app/dist
 # cần directive trong Dockerfile.
 RUN mkdir -p /data && chown -R knit:knit /data /app
 
+# Entrypoint — chuan hoa quyen so huu volume truoc khi chay app.
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 ENV NODE_ENV=production \
     PORT=4000 \
     KNIT_DB=/data/knit.db \
@@ -73,10 +77,14 @@ ENV NODE_ENV=production \
     KNIT_WEB_DIST=/app/app/dist \
     KNIT_SEED=/app/server/seed-data.json
 
-USER knit
+# Container chay bang root de `docker-entrypoint.sh` co the chuan hoa quyen
+# so huu volume (Railway mount volume voi quyen root) roi chay app voi
+# quyen `knit` — app van khong chay voi quyen root.
+USER root
 EXPOSE 4000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||4000)+'/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "server/dist/index.js"]
